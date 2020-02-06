@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//package DataBase;
 package DataBaseConnect;
+//package DataBaseConnect;
+
 
 import java.util.Vector;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,8 +22,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-
-
 public class CompanyGUI extends Application {
     
     private Label msgLabel;
@@ -28,8 +29,11 @@ public class CompanyGUI extends Application {
             lNameField,emailField,phoneField;
     private Button createButton,updateButton,deleteButton,
             firstButton,previousButton,nextButton,lastButton;
+    private GridPane fieldsPane;
     //User-companyGUI
     Vector<User> allUsers=User.selectAll();
+    User user=new User();
+   
     int count=0;
             
     @Override
@@ -46,11 +50,13 @@ public class CompanyGUI extends Application {
     public void start(Stage primaryStage) {
         
          //fieldsPane Creation
-        GridPane fieldsPane = new GridPane();
+        fieldsPane = new GridPane();
         createFieldPane(fieldsPane);
         //btnsPane Creation
         HBox btnsPane = new HBox();
         createBtnPane(btnsPane);
+        handlerEvent();
+        
         //MainPane
         BorderPane rootPane = new BorderPane();
         rootPane.setCenter(fieldsPane);
@@ -63,7 +69,7 @@ public class CompanyGUI extends Application {
         primaryStage.show();
     }
     public static void main(String[] args){
-        Application.launch();
+       Application.launch();    
     }
     public void initFieldPane(){
         idField = new TextField();
@@ -110,6 +116,42 @@ public class CompanyGUI extends Application {
         btnsPane.setPadding(new Insets(20, 20, 20, 20));      
         btnsPane.setSpacing(5);
     };
+    public void handlerEvent(){
+      deleteButton.addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {   
+            int id=allUsers.get(count).id;
+            User.delete("employee_info",id);
+            allUsers.remove(count);
+//            for(User u:allUsers){
+//                 System.out.println(u.email);
+//            }
+      });
+      updateButton.addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
+          User user1 = new User();
+          getTextFieldContent(user1);
+          user1.update();
+          setTextFieldContentInVector();      
+//          for(User u:allUsers){
+//              System.out.println(u.id);   
+//              System.out.println(u.email);
+//          }
+      });
+    }; 
+    public void getTextFieldContent(User user1){
+          user1.id = allUsers.get(count).id;
+          user1.firstName=fNameField.getText();
+          user1.middleName=mNameField.getText();
+          user1.lastName=lNameField.getText();
+          user1.email=emailField.getText();
+          user1.phone=phoneField.getText();
+    }
+    public void setTextFieldContentInVector(){
+          allUsers.get(count).id=Integer.parseInt(idField.getText());
+          allUsers.get(count).firstName= fNameField.getText();
+          allUsers.get(count).middleName= mNameField.getText();
+          allUsers.get(count).lastName= lNameField.getText();
+          allUsers.get(count).email= emailField.getText();
+          allUsers.get(count).phone= phoneField.getText();
+    }
     public void show(int count){
         idField = new TextField(Integer.toString(allUsers.get(count).id));
         fNameField = new TextField(allUsers.get(count).firstName);
@@ -117,8 +159,11 @@ public class CompanyGUI extends Application {
         lNameField = new TextField(allUsers.get(count).lastName);
         emailField = new TextField(allUsers.get(count).email);
         phoneField = new TextField(allUsers.get(count).phone);
+//        int x=Integer.parseInt(count);
+//        System.out.println(allUsers.get(count).id);
 
 
     };
+    
 }
 

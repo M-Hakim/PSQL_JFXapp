@@ -1,5 +1,6 @@
 package DataBaseConnect;
 
+import java.nio.file.Files;
 import java.util.Vector;
 
 public class User {
@@ -20,14 +21,27 @@ public class User {
         email = _email;
         phone = _phone;
     }
-    public void insert(){
-
-    }
-    public void update(){}
-    public void delete(){}
+    public void insert(){};
+    public static void delete(String tableName,int id){
+        companyDB.delete(tableName,id);
+    };
+    public void update(){
+        companyDB.update("employee_info",this);
+    };
 
     public static void main(String [] args){
         Vector<User> users = User.selectAll();
+//         delete("employee_info",5);
+//        User modifiedUser = new User(2, "May", "Turky", "hello", "dgjdchkdc@ovjojvjbijg.com", "07775000");
+//        modifiedUser.update();
+//         for(User u:users){
+//             System.out.println(u.email);
+//         }
+//          delete("employee_info",5);
+//        for(User u:users){
+//             System.out.println(u.email);
+//         }
+       
     }
 
 
